@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 namespace Theos.Player
 {
@@ -13,6 +14,8 @@ namespace Theos.Player
     {
         public int hotbarSlots;
         public Item[] hotbar;
+
+        public Transform itemHolder;
 
         public List<Image> hotbarSlotsUI = new();
 
@@ -60,9 +63,9 @@ namespace Theos.Player
             return hotbar.Any(x => x == null);
         }
 
-        public void SelectItem(int slot)
+        public Item SelectItem(int slot)
         {
-            if (slot < 0 || slot > hotbarSlots) return;
+            if (slot < 0 || slot > hotbarSlots) return null;
             hotbarSlotsUI[selectedHotbarSlot].transform.GetChild(0).gameObject.SetActive(false);
             selectedHotbarSlot = slot - 1;
             currentItem = hotbar[selectedHotbarSlot];
@@ -71,6 +74,20 @@ namespace Theos.Player
             {
                 hotbarSlotsUI[selectedHotbarSlot].transform.GetChild(0).gameObject.SetActive(true);
             }
+
+            if (currentItem != null)
+            {
+                foreach (Transform child in itemHolder)
+                {
+                    Destroy(child.gameObject);
+                }
+                currentItem.transform.SetParent(itemHolder);
+                currentItem.transform.localPosition = Vector3.zero;
+                currentItem.transform.rotation = new Quaternion(0, 0, 0, 0);
+                currentItem.GetComponent<SpriteRenderer>().enabled = true;
+            }
+
+            return currentItem;
         }
 
         public void UseItem()
@@ -81,6 +98,14 @@ namespace Theos.Player
 
         public void RemoveItem(Item item)
         {
+            if(item == currentItem)
+            {
+                foreach (Transform child in itemHolder)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+
             hotbar[Array.IndexOf(hotbar, item)] = null;
             UpdateHotbarUI();
         }

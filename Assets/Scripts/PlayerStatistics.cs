@@ -13,6 +13,10 @@ namespace Assets.Scripts
         public float RunSpeedModifier;
         [HideInInspector]public float TotalSpeedModifier = 1;
 
+        public float Luck;
+
+        public float PickupRange;
+
         public float GetSpeed(bool isSprinting)
         {
             float result = WalkSpeed;

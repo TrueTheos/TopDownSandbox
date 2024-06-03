@@ -1,6 +1,8 @@
 using Assets.Scripts;
+using Assets.Scripts.Items.Weapons;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Theos.Player
@@ -10,12 +12,17 @@ namespace Theos.Player
     {
         private float _currentMovementSpeed;
 
+        public Transform hand;
+
+        public LayerMask interactableLayer;
+
         [Header("Controlls")]
         public KeyCode runKey;
         public KeyCode useItemKey;
+        public KeyCode interactKey;
 
         [SerializeField] private Animator _animator;
-        private Player _player;
+        [SerializeField] private Player _player;
         private PlayerAudioManager _playerAudioManager;
         private PlayerStatistics _playerStats => _player.playerStats;
         private InventoryManager _inventory;
@@ -29,7 +36,6 @@ namespace Theos.Player
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
-            _player = GetComponent<Player>();
             _cam = GetComponentInChildren<Camera>();
             _playerAudioManager = GetComponent<PlayerAudioManager>();
             _inventory = GetComponent<InventoryManager>();
@@ -56,13 +62,49 @@ namespace Theos.Player
                 if (Input.GetKeyDown(key))
                 {
                     int numberPressed = key - KeyCode.Alpha0;
-                    _inventory.SelectItem(numberPressed);
+                    Item item = _inventory.SelectItem(numberPressed);        
+                }
+            }
+
+            if(Input.GetMouseButton(0))
+            {
+                if(_inventory.currentItem is Bow bow)
+                {
+                    bow.Pull();
+                }
+            }
+
+            if(Input.GetMouseButtonUp(0))
+            {
+                if (_inventory.currentItem is Bow bow)
+                {
+                    bow.Shoot();
+                }
+            }
+
+            Vector2 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+
+            hand.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+
+            Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, _playerStats.PickupRange, interactableLayer);
+
+            if (interactables.Length > 0)
+            {
+                if (Input.GetKeyDown(interactKey))
+                {
+                    var closest = interactables.OrderBy(x => Vector2.Distance(transform.position, x.transform.position)).FirstOrDefault();
+
+                    if (closest != null && closest.TryGetComponent(out IInteractable interactable))
+                    {
+                        interactable.Interact(_player);
+                    }
                 }
             }
 
             UpdateMovement();
             Animate();
-        }
+        } 
 
         private void UpdateMovement()
         {
@@ -91,6 +133,13 @@ namespace Theos.Player
                 else _animator.SetFloat("Speed", 1);
             } 
             else _animator.SetFloat("Speed", 0);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (!Application.isPlaying) return;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, _playerStats.PickupRange);
         }
     }
 }

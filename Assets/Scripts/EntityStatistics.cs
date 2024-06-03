@@ -9,8 +9,8 @@ namespace Assets.Scripts
 {
     public abstract class EntityStatistics : ScriptableObject
     {
-        public int MaxHealth;
-        [HideInInspector] public int CurrentHealh;
+        public float MaxHealth;
+        [HideInInspector] public float CurrentHealh;
         public float WalkSpeed;
 
         public void Init()

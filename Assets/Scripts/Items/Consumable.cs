@@ -22,10 +22,17 @@ namespace Assets.Scripts
 
         private IEnumerator ConsumeAnimation(Player player)
         {
-            player.itemUseHolder.sprite = _consumableStats.icon;
-            yield return new WaitForSeconds(_consumableStats.consumeTime);
-            player.itemUseHolder.sprite = null;
-            Consume(player);
+            if (_consumableStats.consumeTime <= 0)
+            {
+                Consume(player);
+            }
+            else
+            {
+                player.itemUseHolder.sprite = _consumableStats.icon;
+                yield return new WaitForSeconds(_consumableStats.consumeTime);
+                player.itemUseHolder.sprite = null;
+                Consume(player);
+            }
         }
 
         public virtual void Consume(Player player) 

@@ -21,16 +21,6 @@ namespace Assets.Scripts
             currentStack = stats.maxStack;
         }
 
-        public virtual void Use(Player player) { }
-
-        public void PickUp(Player player)
-        {
-            if(player.inventoryManager.HasEmptySlot())
-            {
-                player.inventoryManager.AddItem(this);
-            }
-
-            Debug.Log("coś po podniesieniu trzeba zrobic");
-        }
+        public virtual void Use(Player player) { }     
     }
 }

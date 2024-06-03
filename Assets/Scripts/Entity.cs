@@ -18,7 +18,7 @@ namespace Assets.Scripts
             stats.Init();
         }
 
-        public void TakeDamage(int amount)
+        public void TakeDamage(float amount)
         {
             stats.CurrentHealh -= amount;
             if (stats.CurrentHealh <= 0) Die();
