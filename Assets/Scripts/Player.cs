@@ -1,18 +1,27 @@
+using Assets.Scripts;
+using Assets.Scripts.Buffs;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+namespace Theos.Player
 {
-    // Start is called before the first frame update
-    void Start()
+    [RequireComponent(typeof(PlayerController))]
+    [RequireComponent(typeof(PlayerAudioManager))]
+    [RequireComponent(typeof(InventoryManager))]
+    [RequireComponent(typeof(BuffManager))]
+    public class Player : Entity
     {
-        
-    }
+        [HideInInspector] public PlayerStatistics playerStats => stats as PlayerStatistics;
+        public SpriteRenderer itemUseHolder;
+        [HideInInspector] public InventoryManager inventoryManager;
+        [HideInInspector] public BuffManager buffManager;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public override void Awake()
+        {
+            base.Awake();
+            buffManager = GetComponent<BuffManager>();
+            inventoryManager = GetComponent<InventoryManager>();
+        }
     }
 }
