@@ -7,8 +7,11 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public abstract class EntityStatistics : ScriptableObject
+    [CreateAssetMenu(fileName = "EntityStats")]
+    public class EntityStatistics : ScriptableObject
     {
+        public string Name;
+
         public float MaxHealth;
         [HideInInspector] public float CurrentHealh;
         public float WalkSpeed;
