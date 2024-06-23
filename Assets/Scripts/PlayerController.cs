@@ -24,7 +24,7 @@ namespace Theos.Player
         [SerializeField] private Animator _animator;
         [SerializeField] private Player _player;
         private PlayerAudioManager _playerAudioManager;
-        private PlayerStatistics _playerStats => _player.playerStats;
+        private EntityStatistics _playerStats => _player.stats;
         private InventoryManager _inventory;
 
         private Rigidbody2D _rb;
@@ -108,6 +108,8 @@ namespace Theos.Player
 
         private void UpdateMovement()
         {
+            if (!_player.CanMove()) return;
+
             _moveInput.x = Input.GetAxisRaw("Horizontal");
             _moveInput.y = Input.GetAxisRaw("Vertical");
 

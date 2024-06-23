@@ -17,10 +17,10 @@ namespace Assets.Scripts.Items
             switch (potionStats.potionType)
             {
                 case PotionStatistics.PotionType.quick:
-                    player.playerStats.ModifyStatistic(potionStats.statType, potionStats.value);
+                    player.stats.ModifyStatistic(potionStats.buff.statType, potionStats.buff.value);
                     break;
                 case PotionStatistics.PotionType.buff:
-                    player.buffManager.AddStatBuff(potionStats.statType, potionStats.value, potionStats.duration);
+                    player.buffManager.AddBuff(potionStats.buff);
                     break;
             }
         }

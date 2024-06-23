@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Theos.Player;
 using UnityEngine;
-using static Assets.Scripts.PlayerStatistics;
+using static Assets.Scripts.EntityStatistics;
 
 namespace Assets.Scripts.Buffs
 {
@@ -13,11 +13,11 @@ namespace Assets.Scripts.Buffs
     {
         public List<Buff> buffs = new();
 
-        private Player _player;
+        private Entity _entity;
 
         private void Awake()
         {
-            _player = GetComponent<Player>();
+            _entity = GetComponent<Player>();
         }
 
         private void Update()
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Buffs
                 buff.durationLeft -= Time.deltaTime;
                 if (buff.durationLeft <= 0)
                 {
-                    buff.Remove(_player);
+                    buff.Remove(_entity);
                     buffs.Remove(buff);
                 }
             }
@@ -36,51 +36,48 @@ namespace Assets.Scripts.Buffs
             buffs = buffs.Where(x => x != null).ToList();
         }
 
-        public void AddStatBuff(PlayerStatsType statType, float value, float duration)
+        public void AddBuff(BuffStruct buffStruct)
         {
-            StatBuff buff = new StatBuff(statType, value, duration);
-            buff.Add(_player);
-            buffs.Add(new StatBuff(statType, value, duration));            
+            Buff buff = new Buff(buffStruct);
+            buff.Add(_entity);
+            buffs.Add(buff);            
         }
     }
 
-    public abstract class Buff
+    [Serializable]
+    public struct BuffStruct
+    {
+        public float duration;
+        public StatisticType statType;
+        public float value;
+        public bool isPercentageValue;
+    }
+
+    public class Buff
     {
         public float duration;
         public float durationLeft;
-
-        public Buff(float duration)
-        {
-            this.duration = duration;
-            this.durationLeft = this.duration;
-        }
-
-        public virtual void Add(Player player) { }
-
-        public virtual void Remove(Player player) { }
-    }
-
-    public class StatBuff : Buff 
-    {
-        public PlayerStatsType statType;
+        public StatisticType statType;
         public float value;
+        public bool isPercentage;
 
-        public StatBuff(PlayerStatsType statType, float value, float duration) : base(duration)
+        public Buff(BuffStruct buffStruct)
         {
-            this.statType = statType;
-            this.value = value;
+            this.duration = buffStruct.duration;
+            this.durationLeft = this.duration;
+            this.statType = buffStruct.statType;
+            this.value = buffStruct.value;
+            this.isPercentage = buffStruct.isPercentageValue;
         }
 
-        public override void Add(Player player)
+        public void Add(Entity entity) 
         {
-            base.Add(player);
-            player.playerStats.ModifyStatistic(statType, value);
+            entity.stats.ModifyStatistic(statType, value);
         }
 
-        public override void Remove(Player player)
+        public void Remove(Entity entity)
         {
-            player.playerStats.ModifyStatistic(statType, -value);
-            base.Remove(player);
+            entity.stats.ModifyStatistic(statType, -value);
         }
     }
 }
