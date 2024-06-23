@@ -22,14 +22,15 @@ namespace Assets.Scripts.Buffs
 
         private void Update()
         {
-            foreach (Buff buff in buffs)
+            for (int i = 0; i < buffs.Count; i++)
             {
+                Buff buff = buffs[i];
                 if (buff == null) continue;
                 buff.durationLeft -= Time.deltaTime;
                 if (buff.durationLeft <= 0)
                 {
                     buff.Remove(_entity);
-                    buffs.Remove(buff);
+                    buffs[i] = null;
                 }
             }
 

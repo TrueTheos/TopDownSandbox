@@ -33,6 +33,11 @@ namespace Theos.Player
 
         private bool _isRunning;
 
+        private PlayerHUD _playerHUD;
+
+        private Coroutine _rechargeCoroutine;
+        private Coroutine _hideStaminaBarCoroutine;
+
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
@@ -41,15 +46,76 @@ namespace Theos.Player
             _inventory = GetComponent<InventoryManager>();
         }
 
+        private void Start()
+        {
+            _playerHUD = PlayerHUD.instance;
+        }
+
+        private IEnumerator RechargeStamina()
+        {
+            Debug.Log(_playerStats.StartRecharginStaminaCooldown);
+            yield return new WaitForSeconds(_playerStats.StartRecharginStaminaCooldown);
+            Debug.Log("1");
+
+            while (_playerStats.CurrentStamina < _playerStats.MaxStamina && !_isRunning)
+            {
+                _playerStats.CurrentStamina += (_playerStats.MaxStamina * (_playerStats.StaminaRechargeRate/ 100f)) * Time.deltaTime;
+                if (_playerStats.CurrentStamina > _playerStats.MaxStamina)
+                {
+                    _playerStats.CurrentStamina = _playerStats.MaxStamina;
+                }
+                yield return null;
+            }
+            _rechargeCoroutine = null;
+
+            _hideStaminaBarCoroutine = StartCoroutine(DelayedHideStaminaBar(2f));
+        }
+
+        private IEnumerator DelayedHideStaminaBar(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            if(_playerStats.CurrentStamina == _playerStats.MaxStamina)
+            {
+                _playerHUD.ToggleStaminaBar(false);
+            }
+        }
+
         private void Update()
         {
-            if (Input.GetKey(runKey))
+            if (Input.GetKey(runKey) && _playerStats.CurrentStamina > 0f)
             {
-                _isRunning = true;
+                _playerStats.CurrentStamina -= Time.deltaTime;
+                if (_playerStats.CurrentStamina < 0)
+                {
+                    _playerStats.CurrentStamina = 0;
+                }
+               _isRunning = true;
+
+                if (_rechargeCoroutine != null)
+                {
+                    StopCoroutine(_rechargeCoroutine);
+                    _rechargeCoroutine = null;
+                }
+
+                _playerHUD.ToggleStaminaBar(true);
+
+                if (_hideStaminaBarCoroutine != null)
+                {
+                    StopCoroutine(_hideStaminaBarCoroutine);
+                    _hideStaminaBarCoroutine = null;
+                }
             }
             else
             {
-                _isRunning = false;
+                if (_isRunning)
+                {
+                    _isRunning = false;
+                    if (_rechargeCoroutine == null)
+                    {
+                        _rechargeCoroutine = StartCoroutine(RechargeStamina());
+                    }
+                }
             }
 
             if(Input.GetKeyDown(useItemKey))
@@ -102,6 +168,7 @@ namespace Theos.Player
                 }
             }
 
+            _playerHUD.UpdateStaminaBar(_playerStats.CurrentStamina, _playerStats.MaxStamina);
             UpdateMovement();
             Animate();
         } 

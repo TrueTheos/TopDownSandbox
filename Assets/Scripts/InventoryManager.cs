@@ -75,8 +75,16 @@ namespace Theos.Player
                 hotbarSlotsUI[selectedHotbarSlot].transform.GetChild(0).gameObject.SetActive(true);
             }
 
+            PutItemIntoHand();
+
+            return currentItem;
+        }
+
+        private void PutItemIntoHand()
+        {
             if (currentItem != null)
             {
+                itemHolder.gameObject.SetActive(true);
                 foreach (Transform child in itemHolder)
                 {
                     Destroy(child.gameObject);
@@ -86,14 +94,18 @@ namespace Theos.Player
                 currentItem.transform.rotation = new Quaternion(0, 0, 0, 0);
                 currentItem.GetComponent<SpriteRenderer>().enabled = true;
             }
+        }
 
-            return currentItem;
+        private void RemoveItemFromHand()
+        {
+            currentItem.GetComponent<SpriteRenderer>().sprite = null; //todo lepszy sposob na to
         }
 
         public void UseItem()
         {
             if (currentItem == null) return;
             currentItem.Use(_player);
+            RemoveItemFromHand();
         }
 
         public void RemoveItem(Item item)
