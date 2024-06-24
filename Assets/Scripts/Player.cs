@@ -12,6 +12,7 @@ namespace Theos.Player
     public class Player : Entity
     {
         public SpriteRenderer itemUseHolder;
+        public SpriteRenderer playerSprite;
         [HideInInspector] public InventoryManager inventoryManager;
 
         public override void Awake()

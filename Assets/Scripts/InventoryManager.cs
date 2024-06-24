@@ -65,7 +65,7 @@ namespace Theos.Player
 
         public Item SelectItem(int slot)
         {
-            if (slot < 0 || slot > hotbarSlots) return null;
+            if (slot < 0 || slot > hotbarSlots) return null;      
             hotbarSlotsUI[selectedHotbarSlot].transform.GetChild(0).gameObject.SetActive(false);
             selectedHotbarSlot = slot - 1;
             currentItem = hotbar[selectedHotbarSlot];
@@ -74,6 +74,8 @@ namespace Theos.Player
             {
                 hotbarSlotsUI[selectedHotbarSlot].transform.GetChild(0).gameObject.SetActive(true);
             }
+
+            if(currentItem != null) PlayerHUD.instance.ChangeItemName(currentItem);
 
             PutItemIntoHand();
 

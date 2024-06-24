@@ -14,6 +14,6 @@ public class Cursor : MonoBehaviour
         Vector3 mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
         mousePosition.z = 0f;
-        transform.position = mousePosition;
+        transform.position = Vector3.Lerp(transform.position, mousePosition,100f);
     }
 }

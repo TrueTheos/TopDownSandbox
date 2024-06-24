@@ -53,9 +53,7 @@ namespace Theos.Player
 
         private IEnumerator RechargeStamina()
         {
-            Debug.Log(_playerStats.StartRecharginStaminaCooldown);
             yield return new WaitForSeconds(_playerStats.StartRecharginStaminaCooldown);
-            Debug.Log("1");
 
             while (_playerStats.CurrentStamina < _playerStats.MaxStamina && !_isRunning)
             {
@@ -111,10 +109,7 @@ namespace Theos.Player
                 if (_isRunning)
                 {
                     _isRunning = false;
-                    if (_rechargeCoroutine == null)
-                    {
-                        _rechargeCoroutine = StartCoroutine(RechargeStamina());
-                    }
+                    _rechargeCoroutine ??= StartCoroutine(RechargeStamina());
                 }
             }
 
@@ -148,11 +143,6 @@ namespace Theos.Player
                 }
             }
 
-            Vector2 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
-
-            hand.transform.rotation = Quaternion.Euler(0, 0, rotZ);
-
             Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, _playerStats.PickupRange, interactableLayer);
 
             if (interactables.Length > 0)
@@ -171,7 +161,40 @@ namespace Theos.Player
             _playerHUD.UpdateStaminaBar(_playerStats.CurrentStamina, _playerStats.MaxStamina);
             UpdateMovement();
             Animate();
+            UpdateHand();
         } 
+
+        private void UpdateHand()
+        {
+            Vector2 mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
+            /*Vector2 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            float rotZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+
+            hand.transform.rotation = Quaternion.Euler(0, 0, rotZ);*/
+
+            Vector2 direction = (mousePos - (Vector2)transform.position).normalized;
+            hand.transform.right = direction;
+
+            Vector2 scale = hand.transform.localScale;
+            if(direction.x < 0)
+            {
+                scale.y = -1;
+            }
+            else if(direction.x > 0)
+            {
+                scale.y = 1;
+            }
+            hand.transform.localScale = scale;
+
+            if(hand.transform.eulerAngles.z > 0 && hand.transform.eulerAngles.z < 180)
+            {
+                hand.GetComponentInChildren<SpriteRenderer>().sortingOrder = _player.playerSprite.sortingOrder - 1;
+            }
+            else
+            {
+                hand.GetComponentInChildren<SpriteRenderer>().sortingOrder = _player.playerSprite.sortingOrder + 1;
+            }
+        }
 
         private void UpdateMovement()
         {
@@ -190,13 +213,13 @@ namespace Theos.Player
 
         private void Animate()
         {
-            if (_moveInput != Vector2.zero)
-            {
-                _animator.SetFloat("Horizontal", _moveInput.x);
-                _animator.SetFloat("Vertical", _moveInput.y);
-            }
+            Vector2 mousePosition = _cam.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 playerPosition = transform.position;
+            Vector2 directionToMouse = (mousePosition - playerPosition).normalized;
+            _animator.SetFloat("Horizontal", directionToMouse.x);
+            _animator.SetFloat("Vertical", directionToMouse.y);
 
-            if(_currentMovementSpeed > 0) 
+            if (_currentMovementSpeed > 0) 
             {
                 if(_isRunning) _animator.SetFloat("Speed", 2);
                 else _animator.SetFloat("Speed", 1);
