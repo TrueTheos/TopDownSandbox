@@ -20,6 +20,7 @@ namespace Theos.Player
         public KeyCode runKey;
         public KeyCode useItemKey;
         public KeyCode interactKey;
+        public KeyCode dropItemKey;
 
         [SerializeField] private Animator _animator;
         [SerializeField] private Player _player;
@@ -118,6 +119,11 @@ namespace Theos.Player
                 _inventory.UseItem();
             }
 
+            if(Input.GetKeyDown(dropItemKey))
+            {
+                _inventory.DropItem();
+            }
+
             for (KeyCode key = KeyCode.Alpha0; key <= KeyCode.Alpha9; key++)
             {
                 if (Input.GetKeyDown(key))
@@ -143,19 +149,26 @@ namespace Theos.Player
                 }
             }
 
-            Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, _playerStats.PickupRange, interactableLayer);
+            List<IInteractable> interactables = Physics2D.OverlapCircleAll(transform.position, _playerStats.PickupRange, interactableLayer).Select(x => x.GetComponent<IInteractable>()).ToList();
+            interactables = interactables.Where(x => x.CanInteract()).ToList();
 
-            if (interactables.Length > 0)
+            if (interactables.Count > 0)
             {
+                _playerHUD.TogglePickupHint(true);
+
                 if (Input.GetKeyDown(interactKey))
                 {
-                    var closest = interactables.OrderBy(x => Vector2.Distance(transform.position, x.transform.position)).FirstOrDefault();
+                    var closest = interactables.OrderBy(x => Vector2.Distance(transform.position, x.GetGameObject().transform.position)).FirstOrDefault();
 
-                    if (closest != null && closest.TryGetComponent(out IInteractable interactable))
+                    if (closest != null)
                     {
-                        interactable.Interact(_player);
+                        closest.Interact(_player);
                     }
                 }
+            }
+            else
+            {
+                _playerHUD.TogglePickupHint(false);
             }
 
             _playerHUD.UpdateStaminaBar(_playerStats.CurrentStamina, _playerStats.MaxStamina);

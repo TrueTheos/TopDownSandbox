@@ -14,6 +14,7 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private TextMeshProUGUI itemName;
     [SerializeField] private float itemNameHideAfter = 2f;
     private Coroutine hideTextCoroutine;
+    [SerializeField] private TextMeshProUGUI pickupHint;
 
     private void Awake()
     {
@@ -46,6 +47,11 @@ public class PlayerHUD : MonoBehaviour
         }
 
         hideTextCoroutine = StartCoroutine(HideItemName());
+    }
+
+    public void TogglePickupHint(bool toggle) 
+    {
+        pickupHint.enabled = toggle;
     }
 
     private IEnumerator HideItemName()

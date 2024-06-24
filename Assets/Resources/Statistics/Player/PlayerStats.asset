@@ -18,5 +18,12 @@ MonoBehaviour:
   WalkSpeed: 3
   RunSpeedModifier: 1.5
   TotalSpeedModifier: 1
+  Vigor: 10
+  Intelligence: 10
+  Dexterity: 10
+  Strength: 10
+  PickupRange: 1
   Luck: 0
-  PickupRange: 2
+  StaminaRechargeRate: 20
+  StartRecharginStaminaCooldown: 2
+  CurrentStamina: 0

@@ -28,9 +28,7 @@ namespace Assets.Scripts
             }
             else
             {
-                player.itemUseHolder.sprite = _consumableStats.icon;
                 yield return new WaitForSeconds(_consumableStats.consumeTime);
-                player.itemUseHolder.sprite = null;
                 Consume(player);
             }
         }
