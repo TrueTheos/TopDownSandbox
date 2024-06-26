@@ -11,5 +11,6 @@ namespace Assets.Scripts.Statistics
     [CreateAssetMenu(menuName = "Items/Weapons/Wand", fileName = "Wand")]
     public class WandStatistics : ItemStatistics
     {
+        public float ManaCost;
     }
 }

@@ -25,6 +25,8 @@ namespace Assets.Scripts
             stats.Init();
         }
 
+        public virtual void Start() { }
+
         public bool CanMove()
         {
             return !statusEffectManager.HasEffect(StatusEffectType.Stunned);

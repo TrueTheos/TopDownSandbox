@@ -16,6 +16,7 @@ namespace Assets.Scripts
 
         public override void Use(Player player)
         {
+            player.inventoryManager.IsUsingItem = true;
             base.Use(player);
             StartCoroutine(ConsumeAnimation(player));
         }
@@ -31,6 +32,7 @@ namespace Assets.Scripts
                 yield return new WaitForSeconds(_consumableStats.consumeTime);
                 Consume(player);
             }
+            player.inventoryManager.IsUsingItem = false;
         }
 
         public virtual void Consume(Player player) 

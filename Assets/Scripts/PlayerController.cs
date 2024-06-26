@@ -129,7 +129,7 @@ namespace Theos.Player
                 if (Input.GetKeyDown(key))
                 {
                     int numberPressed = key - KeyCode.Alpha0;
-                    Item item = _inventory.SelectItem(numberPressed);        
+                    if(!_inventory.IsUsingItem) _inventory.SelectItem(numberPressed);        
                 }
             }
 

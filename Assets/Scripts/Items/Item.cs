@@ -19,7 +19,7 @@ namespace Assets.Scripts
         [HideInInspector] public ItemStatistics stats;
         [HideInInspector] public int currentStack;
 
-        public ItemEvent OnUseEvent;
+        public UnityEvent OnUseEvents;
 
         private SpriteRenderer _spriteRenderer;
 
@@ -43,7 +43,7 @@ namespace Assets.Scripts
 
         public virtual void Use(Player player) 
         {
-            OnUseEvent.Invoke(player);
+            OnUseEvents.Invoke();
         }
 
         public void PickUp(Player player)
@@ -69,5 +69,7 @@ namespace Assets.Scripts
         {
             return gameObject;
         }
+
+        public virtual bool CanUse(Player player) { return true; }
     }
 }

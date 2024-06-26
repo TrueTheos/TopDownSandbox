@@ -15,6 +15,9 @@ MonoBehaviour:
   Name: Player
   MaxHealth: 100
   CurrentHealh: 0
+  MaxMana: 100
+  CurrentMana: 0
+  ManaRegeneration: 15
   WalkSpeed: 3
   RunSpeedModifier: 1.5
   TotalSpeedModifier: 1

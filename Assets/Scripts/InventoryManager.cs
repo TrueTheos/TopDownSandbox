@@ -23,6 +23,8 @@ namespace Theos.Player
 
         private Player _player;
 
+        public bool IsUsingItem;
+
         private void Awake()
         {
             _player = GetComponent<Player>();
@@ -100,6 +102,8 @@ namespace Theos.Player
         public void UseItem()
         {
             if (currentItem == null) return;
+            if (IsUsingItem) return;
+            if (!currentItem.CanUse(_player)) return;
             currentItem.Use(_player);
         }
 
@@ -109,6 +113,9 @@ namespace Theos.Player
             currentItem.transform.SetParent(null);
             hotbar[Array.IndexOf(hotbar, currentItem)] = null;
             currentItem.onGround = true;
+            currentItem.gameObject.transform.position = gameObject.transform.position;
+            Debug.Log(gameObject.transform.position);
+            Debug.Log(currentItem.gameObject.transform.position);
             currentItem = null;
             UpdateHotbarUI();
         }

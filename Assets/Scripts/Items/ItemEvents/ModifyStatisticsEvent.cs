@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Assets.Scripts.EntityStatistics;
 
 namespace Assets.Scripts.Items.ItemEvents
 {
     public class ModifyStatisticsEvent : ItemEvent
     {
-        public List<BuffStruct> Statistics;
+        public List<StatisticValue> Statistics;
 
-        public override void Invoke(Entity entity)
+        public void Invoke(Entity entity)
         {
-            
+            entity.stats.ModifyStatistics(Statistics);
         }
     }
 }

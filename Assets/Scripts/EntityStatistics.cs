@@ -16,6 +16,9 @@ namespace Assets.Scripts
         [Header("Base Stats")]
         public float MaxHealth;
         [HideInInspector] public float CurrentHealh;
+        public float MaxMana;
+        [HideInInspector] public float CurrentMana;
+        public float ManaRegeneration;
         public float WalkSpeed;
         public float RunSpeedModifier;
         [HideInInspector] public float TotalSpeedModifier = 1;
@@ -35,6 +38,7 @@ namespace Assets.Scripts
         {
             CurrentHealh = MaxHealth;
             CurrentStamina = MaxStamina;
+            CurrentMana = MaxMana;
         }
 
         public float GetSpeed(bool isSprinting)
@@ -83,14 +87,30 @@ namespace Assets.Scripts
                 case StatisticType.PickupRange:
                     PickupRange += value;
                     break;
+                case StatisticType.MaxMana:
+                    MaxMana += value;
+                    break;
+                case StatisticType.CurrentMana:
+                    CurrentMana += value;
+                    break;
+                case StatisticType.ManaRegeneration:
+                    ManaRegeneration += value;
+                    break;
             }
         }
 
-        public void ModifyStatistics(List<StatisticValue> stats)
+        public void ModifyStatistics(List<StatisticValue> stats, bool reversed = false)
         {
             foreach (StatisticValue stat in stats)
             {
-                ModifyStatistic(stat.statType, stat.value);
+                if(reversed)
+                {
+                    ModifyStatistic(stat.statType, -stat.value);
+                }
+                else
+                {
+                    ModifyStatistic(stat.statType, stat.value);
+                }
             }
         }
 
@@ -111,7 +131,10 @@ namespace Assets.Scripts
             Dexterity,
             Strength,
             Luck,
-            PickupRange
+            PickupRange,
+            MaxMana,
+            CurrentMana,
+            ManaRegeneration
         }
 
         [Serializable]

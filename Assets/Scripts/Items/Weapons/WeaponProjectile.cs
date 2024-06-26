@@ -9,21 +9,24 @@ namespace Assets.Scripts.Items.Weapons
 {
     public class WeaponProjectile : MonoBehaviour
     {
-        private float _damage;
+        private float _speed;
 
-        public void Init(float damage)
+        public void Shoot(float speed)
         {
-            _damage = damage;
+            _speed = speed;
+        }
 
-            //toodo make it fly baby
+        private void Update()
+        {
+            transform.Translate(Vector2.right * _speed * Time.deltaTime);
         }
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.gameObject.TryGetComponent(out Entity entity))
+            /*if(collision.gameObject.TryGetComponent(out Entity entity))
             {
                 entity.TakeDamage(_damage);
-            }
+            }*/
         }
     }
 }

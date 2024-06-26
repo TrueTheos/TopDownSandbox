@@ -9,6 +9,6 @@ namespace Assets.Scripts.Items.ItemEvents
 {
     public abstract class ItemEvent : MonoBehaviour
     {
-        public abstract void Invoke(Entity entity);
+       
     }
 }

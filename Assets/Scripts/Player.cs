@@ -20,5 +20,11 @@ namespace Theos.Player
             base.Awake();
             inventoryManager = GetComponent<InventoryManager>();
         }
+
+        public override void Start()
+        {
+            base.Start();
+            PlayerHUD.instance.Init(this);
+        }
     }
 }
