@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Items;
+using Assets.Scripts.Items.ItemEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Theos.Player;
 using UnityEngine;
+using UnityEngine.Events;
 using static UnityEditor.Progress;
 
 namespace Assets.Scripts
@@ -17,9 +19,11 @@ namespace Assets.Scripts
         [HideInInspector] public ItemStatistics stats;
         [HideInInspector] public int currentStack;
 
+        public ItemEvent OnUseEvent;
+
         private SpriteRenderer _spriteRenderer;
 
-        public bool onGround = true;
+        [HideInInspector] public bool onGround = true;
 
         private void Awake()
         {
@@ -37,8 +41,10 @@ namespace Assets.Scripts
             currentStack = stats.maxStack;
         }
 
-
-        public virtual void Use(Player player) { }
+        public virtual void Use(Player player) 
+        {
+            OnUseEvent.Invoke(player);
+        }
 
         public void PickUp(Player player)
         {

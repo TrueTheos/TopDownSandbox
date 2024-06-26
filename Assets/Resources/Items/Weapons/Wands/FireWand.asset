@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85f17fa9d73d8545861a0e4217b3a6e, type: 3}
+  m_Name: FireWand
+  m_EditorClassIdentifier: 
+  itemName: Fire Wand
+  description: 
+  icon: {fileID: 457435245, guid: 5f96845e5034ef14886304e895d36642, type: 3}
+  maxStack: 1

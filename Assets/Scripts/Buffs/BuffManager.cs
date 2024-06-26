@@ -49,8 +49,7 @@ namespace Assets.Scripts.Buffs
     public struct BuffStruct
     {
         public float duration;
-        public StatisticType statType;
-        public float value;
+        public List<StatisticValue> statValue;
         public bool isPercentageValue;
     }
 
@@ -58,27 +57,25 @@ namespace Assets.Scripts.Buffs
     {
         public float duration;
         public float durationLeft;
-        public StatisticType statType;
-        public float value;
+        public List<StatisticValue> statValue;
         public bool isPercentage;
 
         public Buff(BuffStruct buffStruct)
         {
             this.duration = buffStruct.duration;
             this.durationLeft = this.duration;
-            this.statType = buffStruct.statType;
-            this.value = buffStruct.value;
+            this.statValue = buffStruct.statValue;
             this.isPercentage = buffStruct.isPercentageValue;
         }
 
         public void Add(Entity entity) 
         {
-            entity.stats.ModifyStatistic(statType, value);
+            entity.stats.ModifyStatistics(statValue);
         }
 
         public void Remove(Entity entity)
         {
-            entity.stats.ModifyStatistic(statType, -value);
+            entity.stats.ModifyStatistics(statValue);
         }
     }
 }

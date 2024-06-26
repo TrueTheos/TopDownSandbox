@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Buffs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -85,6 +86,14 @@ namespace Assets.Scripts
             }
         }
 
+        public void ModifyStatistics(List<StatisticValue> stats)
+        {
+            foreach (StatisticValue stat in stats)
+            {
+                ModifyStatistic(stat.statType, stat.value);
+            }
+        }
+
         public float GetStamina()
         {
             return Dexterity; //todo jakas formuła na stamine
@@ -103,6 +112,13 @@ namespace Assets.Scripts
             Strength,
             Luck,
             PickupRange
+        }
+
+        [Serializable]
+        public struct StatisticValue
+        {
+            public StatisticType statType;
+            public float value;
         }
     }
 }

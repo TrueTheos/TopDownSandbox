@@ -38,9 +38,9 @@ namespace Assets.Scripts.Items.Weapons
                 return;
             }
 
-            _dmg = _bowStats.GetDamage() * (_bowStats.maxTensionDamageMultiplier * (_currentTension / _bowStats.maxTensionTime));
+            //_dmg = _bowStats.GetDamage() * (_bowStats.maxTensionDamageMultiplier * (_currentTension / _bowStats.maxTensionTime));
 
-            WeaponProjectile projectile = Instantiate(_bowStats.projectile).GetComponent<WeaponProjectile>();
+            //WeaponProjectile projectile = Instantiate(_bowStats.projectile).GetComponent<WeaponProjectile>();
             _currentTension = 0;        
         }
     }

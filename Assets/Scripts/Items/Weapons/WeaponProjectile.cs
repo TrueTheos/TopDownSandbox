@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Items.Weapons
 {
-    public class WeaponProjectile :MonoBehaviour
+    public class WeaponProjectile : MonoBehaviour
     {
         private float _damage;
 

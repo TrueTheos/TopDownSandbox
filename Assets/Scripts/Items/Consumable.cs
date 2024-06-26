@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public abstract class Consumable : Item
+    public class Consumable : Item
     {
         protected ConsumableStatistics _consumableStats => stats as ConsumableStatistics;
 
@@ -37,7 +37,17 @@ namespace Assets.Scripts
         {
             currentStack--;
 
-            if(currentStack == 0)
+            switch (_consumableStats.consumableType)
+            {
+                case ConsumableStatistics.ConsumableType.quick:
+                    player.stats.ModifyStatistics(_consumableStats.stats);
+                    break;
+                case ConsumableStatistics.ConsumableType.buff:
+                    player.buffManager.AddBuff(_consumableStats.buff);
+                    break;
+            }
+
+            if (currentStack == 0)
             {
                 player.inventoryManager.RemoveItem(this);
             }
