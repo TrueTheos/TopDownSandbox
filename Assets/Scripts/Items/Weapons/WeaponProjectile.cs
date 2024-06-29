@@ -4,12 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.Items.Weapons
 {
     public class WeaponProjectile : MonoBehaviour
     {
         private float _speed;
+        public UnityEvent onCollisionEvent;
+        public UnityEvent onDestroyEvent;
+        public enum DestroyType { AnyCollision, Wall, Entity}
+        public DestroyType destroyType;
 
         public void Shoot(float speed)
         {
@@ -23,10 +28,29 @@ namespace Assets.Scripts.Items.Weapons
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            /*if(collision.gameObject.TryGetComponent(out Entity entity))
+            onCollisionEvent.Invoke();
+
+            switch (destroyType)
             {
-                entity.TakeDamage(_damage);
-            }*/
+                case DestroyType.AnyCollision:
+                    onDestroyEvent.Invoke();
+                    Destroy(this);
+                    break;
+                case DestroyType.Entity:
+                    if (collision.TryGetComponent(out Entity _))
+                    {
+                        onDestroyEvent.Invoke();
+                        Destroy(this);
+                    }
+                    break;
+                case DestroyType.Wall:
+                    if(!collision.TryGetComponent(out Entity _))
+                    {
+                        onDestroyEvent.Invoke();
+                        Destroy(this);
+                    }
+                    break;
+            }
         }
     }
 }

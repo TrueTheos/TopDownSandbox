@@ -28,6 +28,8 @@ namespace Assets.Scripts
         public float Strength = 10; //Attack power, pozwala nosic ciezki armor?
         public float PickupRange;
         public float Luck; // Crit chance
+        public float Armor;
+        public float MagicResistance;
         [HideInInspector] public float StaminaRechargeRate = 20; // ile % z max staminy recharguje w 1 sekunde
         public float StartRecharginStaminaCooldown = 2;
 
@@ -96,6 +98,9 @@ namespace Assets.Scripts
                 case StatisticType.ManaRegeneration:
                     ManaRegeneration += value;
                     break;
+                case StatisticType.Armor:
+                    Armor += value;
+                    break;
             }
         }
 
@@ -134,7 +139,8 @@ namespace Assets.Scripts
             PickupRange,
             MaxMana,
             CurrentMana,
-            ManaRegeneration
+            ManaRegeneration,
+            Armor
         }
 
         [Serializable]
