@@ -17,7 +17,7 @@ namespace Assets.Scripts
     {
         [SerializeField] private ItemStatistics _baseStats;
         [HideInInspector] public ItemStatistics stats;
-        [HideInInspector] public int currentStack;
+        [HideInInspector] public int currentStack = 1;
 
         public UnityEvent OnUseEvents;
 
@@ -33,6 +33,8 @@ namespace Assets.Scripts
             {
                 _spriteRenderer.sprite = _baseStats.icon;
             }
+
+            gameObject.tag = "Item";
         }
 
         private void Start()

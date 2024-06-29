@@ -75,7 +75,7 @@ namespace Assets.Scripts.Buffs
 
         public void Remove(Entity entity)
         {
-            entity.stats.ModifyStatistics(statValue);
+            entity.stats.ModifyStatistics(statValue, true);
         }
     }
 }

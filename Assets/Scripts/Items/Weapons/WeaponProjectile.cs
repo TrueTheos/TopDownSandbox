@@ -18,6 +18,7 @@ namespace Assets.Scripts.Items.Weapons
 
         public void Shoot(float speed)
         {
+            Destroy(gameObject, 15f);
             _speed = speed;
         }
 
@@ -28,26 +29,28 @@ namespace Assets.Scripts.Items.Weapons
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
+            if (collision.gameObject.CompareTag("Item")) return;
+     
             onCollisionEvent.Invoke();
 
             switch (destroyType)
             {
                 case DestroyType.AnyCollision:
                     onDestroyEvent.Invoke();
-                    Destroy(this);
+                    Destroy(gameObject);
                     break;
                 case DestroyType.Entity:
                     if (collision.TryGetComponent(out Entity _))
                     {
                         onDestroyEvent.Invoke();
-                        Destroy(this);
+                        Destroy(gameObject);
                     }
                     break;
                 case DestroyType.Wall:
                     if(!collision.TryGetComponent(out Entity _))
                     {
                         onDestroyEvent.Invoke();
-                        Destroy(this);
+                        Destroy(gameObject);
                     }
                     break;
             }

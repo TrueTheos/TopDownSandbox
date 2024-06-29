@@ -1,9 +1,11 @@
 ﻿using Assets.Scripts.Buffs;
 using System.Collections.Generic;
+using UnityEngine;
 using static Assets.Scripts.EntityStatistics;
 
 namespace Assets.Scripts.Items
 {
+    [CreateAssetMenu(menuName = "Items/Consumable", fileName = "Consumable")]
     public class ConsumableStatistics : ItemStatistics
     {
         public float consumeTime;

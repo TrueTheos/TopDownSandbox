@@ -114,8 +114,6 @@ namespace Theos.Player
             hotbar[Array.IndexOf(hotbar, currentItem)] = null;
             currentItem.onGround = true;
             currentItem.gameObject.transform.position = gameObject.transform.position;
-            Debug.Log(gameObject.transform.position);
-            Debug.Log(currentItem.gameObject.transform.position);
             currentItem = null;
             UpdateHotbarUI();
         }

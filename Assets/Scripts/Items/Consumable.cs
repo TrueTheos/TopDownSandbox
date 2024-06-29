@@ -39,6 +39,7 @@ namespace Assets.Scripts
         {
             currentStack--;
 
+            Debug.Log("Xd");
             switch (_consumableStats.consumableType)
             {
                 case ConsumableStatistics.ConsumableType.quick:
@@ -49,7 +50,7 @@ namespace Assets.Scripts
                     break;
             }
 
-            if (currentStack == 0)
+            if (currentStack <= 0)
             {
                 player.inventoryManager.RemoveItem(this);
             }
